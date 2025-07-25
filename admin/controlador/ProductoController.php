@@ -79,7 +79,8 @@ class ProductoController
     {
         $this->verificarSesion();
 
-        if (!isset($_GET['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_GET['csrf_token'])) {
+        // ✅ Verificar token desde POST
+        if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
             die("Token CSRF inválido.");
         }
 
@@ -91,6 +92,7 @@ class ProductoController
         header("Location: index.php?action=listar");
         exit();
     }
+
 
     public function editar()
     {
