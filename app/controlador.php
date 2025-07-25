@@ -1,12 +1,20 @@
 <?php
-require_once "modelo.php";
+require_once __DIR__ . '/../admin/modelo/ProductoDAO.php';
+require_once __DIR__ . '/../admin/modelo/CategoriaDAO.php'; // si también necesitas categorías
+
 
 class Controller
 {
     public function inicio()
     {
-        $dao = new ProductoDAO();
-        $productos = $dao->obtenerProductosPorCategoria();
+        require_once "admin/modelo/CategoriaDAO.php";
+        require_once "admin/modelo/ProductoDAO.php";
+
+        $categoriaDAO = new CategoriaDAO();
+        $productoDAO = new ProductoDAO();
+
+        $categorias = $categoriaDAO->listar();
+        $productos = $productoDAO->listar(); // ✅ método existente
 
         // Agrupar por categoría
         $agrupados = [];
@@ -19,6 +27,8 @@ class Controller
 
     public function detalle($id)
     {
+        require_once "admin/modelo/ProductoDAO.php";
+
         if (!$id || !is_numeric($id)) {
             http_response_code(400);
             echo "ID de producto inválido.";
@@ -26,7 +36,7 @@ class Controller
         }
 
         $dao = new ProductoDAO();
-        $producto = $dao->obtenerPorId($id);
+        $producto = $dao->buscarPorId($id); // ✅ método correcto según tu DAO
 
         if (!$producto) {
             http_response_code(404);
@@ -93,12 +103,13 @@ class Controller
 
         $carrito = $_SESSION['carrito'] ?? [];
 
+        require_once "admin/modelo/ProductoDAO.php";
         $dao = new ProductoDAO();
 
         $productosCarrito = [];
 
         foreach ($carrito as $id => $cantidad) {
-            $producto = $dao->obtenerPorId($id);
+            $producto = $dao->buscarPorId($id); // ✅ nombre correcto
             if ($producto) {
                 $producto['cantidad'] = $cantidad;
                 $productosCarrito[] = $producto;
@@ -107,6 +118,7 @@ class Controller
 
         include "vista/carrito.php";
     }
+
     public function eliminarDelCarrito($id)
     {
         session_start();
@@ -122,12 +134,11 @@ class Controller
     public function vaciarCarrito()
     {
         session_start();
-
         unset($_SESSION['carrito']);
-
         header("Location: index.php?action=verCarrito");
         exit();
     }
+
     public function disminuirCantidad($id)
     {
         session_start();
@@ -142,5 +153,30 @@ class Controller
 
         header("Location: index.php?action=verCarrito");
         exit();
+    }
+
+    public function filtrarCategoria($id)
+    {
+        require_once "admin/modelo/CategoriaDAO.php";
+        require_once "admin/modelo/ProductoDAO.php";
+
+        $categoriaDAO = new CategoriaDAO();
+        $productoDAO = new ProductoDAO();
+
+        $categorias = $categoriaDAO->listar();
+
+        if (!$id || !is_numeric($id)) {
+            header("Location: index.php?action=inicio");
+            exit;
+        }
+
+        $productos = $productoDAO->listarPorCategoria($id); // ✅ método correcto
+
+        $agrupados = [];
+        foreach ($productos as $prod) {
+            $agrupados[$prod['categoria']][] = $prod;
+        }
+
+        include "vista/tienda.php"; // ✅ corregida la ruta
     }
 }

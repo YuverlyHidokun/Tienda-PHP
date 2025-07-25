@@ -4,9 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Tienda Virtual</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Tu CSS personalizado -->
     <link rel="stylesheet" href="/tienda/assets/css/estilos.css?v=1.1">
 </head>
 
@@ -23,8 +21,18 @@
         </div>
     </nav>
 
-    <!-- CONTENIDO -->
+    <!-- FILTRO POR CATEGORÍA -->
     <div class="container py-4">
+        <div class="d-flex flex-wrap justify-content-center mb-4">
+            <a href="index.php" class="btn btn-outline-dark me-2 mb-2">Todas</a>
+            <?php foreach ($categorias as $cat): ?>
+                <a href="index.php?action=filtrarCategoria&id=<?= $cat['id'] ?>" class="btn btn-outline-danger me-2 mb-2">
+                    <?= htmlspecialchars($cat['nombre']) ?>
+                </a>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- PRODUCTOS -->
         <?php foreach ($agrupados as $categoria => $items): ?>
             <h2 class="text-center text-uppercase my-4" style="color: #8A0000;"><?= htmlspecialchars($categoria) ?></h2>
             <div class="row justify-content-center">
@@ -54,10 +62,9 @@
         <p class="mb-0">© <?= date('Y') ?> Tienda Virtual - Todos los derechos reservados</p>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Funciones JS -->
     <script src="assets/js/funciones.js"></script>
 </body>
 
 </html>
+

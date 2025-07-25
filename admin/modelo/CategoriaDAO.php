@@ -1,5 +1,5 @@
 <?php
-require_once APP_PATH . "/config/conexion.php";
+require_once __DIR__ . '/../../config/conexion.php';
 
 class CategoriaDAO {
     private $conexion;
@@ -7,9 +7,9 @@ class CategoriaDAO {
     public function __construct() {
         $this->conexion = Conexion::conectar();
     }
-
-    public function listar() {
-        $sql = "SELECT * FROM categoria ORDER BY nombre";
+    public function listar()
+    {
+        $sql = "SELECT * FROM categoria ORDER BY nombre ASC";
         $stmt = $this->conexion->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -19,4 +19,5 @@ class CategoriaDAO {
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
 }

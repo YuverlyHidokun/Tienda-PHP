@@ -35,6 +35,10 @@ switch ($action) {
         $id = $_GET['id'] ?? null;
         $controller->disminuirCantidad($id);
         break;
+    case 'filtrarCategoria':
+        $id = $_GET['id'] ?? null;
+        $controller->filtrarCategoria($id);
+        break;
     default:
         http_response_code(404);
         echo "Página no encontrada.";
