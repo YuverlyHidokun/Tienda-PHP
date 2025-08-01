@@ -1,7 +1,6 @@
 <?php
 
 require_once APP_PATH . "/admin/modelo/ProductoDAO.php";
-
 class ProductoController
 {
     private $modelo;

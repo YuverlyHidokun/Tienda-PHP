@@ -26,6 +26,9 @@ if (empty($_SESSION['csrf_token'])) {
                 <a href="index.php?action=registrar" class="btn" style="background-color: #3B060A; color: #FFF287;">
                     + Registrar Nuevo Producto
                 </a>
+                <a href="index.php?action=verVentas" class="btn btn-outline-dark">
+                    Ver Ventas
+                </a>
                 <a href="index.php?action=logout" class="btn btn-outline-danger">
                     Cerrar Sesión
                 </a>
